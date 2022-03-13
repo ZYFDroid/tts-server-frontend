@@ -5,14 +5,19 @@ var apiroot = "";
 var apiget = function (path, param, callback) {
     axios.get(apiroot + path, { params: param })
         .then(res => {
+            
             var data = res.data;
-            callback(data.code, data.msg, data);
+            if(data.code == 0){
+            callback(200, data.msg, data);
+            }else{
+                callback(590, data.message, {});
+            }
         })
         .catch(err => {
             callback(590, err, {});
         });
 }
-
+// eslint-disable-next-line
 function setSearchParam(param) {
     var searchstr = "";
     var keys = Object.keys(param);
@@ -28,16 +33,6 @@ function setSearchParam(param) {
 }
 
 
-var apipost = function (path, param, callback) {
-    axios.post(apiroot + path, setSearchParam(param))
-        .then(res => {
-            var data = res.data;
-            callback(data.code, data.msg, data);
-        })
-        .catch(err => {
-            callback(590, err, {});
-        });
-}
 
 
 var apidata = function (path, jsondata, callback) {
@@ -70,4 +65,4 @@ var playAudio = function (blob) {
     fr.readAsArrayBuffer(blob);
 }
 
-export { apiget, apipost, apidata,playAudio }
+export { apiget, apidata,playAudio }
